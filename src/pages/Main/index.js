@@ -1,31 +1,9 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Home</Text>
-    </View>
-  );
-}
-
-function FavoriteScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Favoritos!</Text>
-    </View>
-  );
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+import HomeScreen from '../Home/index.js';
+import FavoriteScreen from '../Favorite/index.js';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -64,12 +42,10 @@ function MyTabs() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <NavigationContainer>
       <MyTabs />
     </NavigationContainer>
   );
 }
-
-export default App;
