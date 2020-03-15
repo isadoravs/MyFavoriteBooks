@@ -1,13 +1,38 @@
 import * as React from 'react';
-import {TextInput, View, StyleSheet, Text, FlatList} from 'react-native';
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
-import {getBooks} from '../../store/ducks/books';
+import {getBooks, getPage} from '../../store/ducks/books';
 
-function Item({title}) {
+function Item({item}) {
   return (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+      <Image
+        style={styles.thumbnail}
+        source={{uri: item.imageLinks?.smallThumbnail}}
+      />
+      <View flexDirection="column">
+        <Text numberOfLines={2} style={styles.title}>
+          {item.title}
+        </Text>
+        <Text style={styles.authors}>{item.publisher}</Text>
+        <Text style={styles.authors}>
+          {item.authors?.map((name, index) => {
+            if (index === item.authors.length - 1) {
+              return name;
+            }
+            return `${name}, `;
+          })}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -20,20 +45,35 @@ function EmptyContainer() {
   );
 }
 
+function FooterComponent({loading}) {
+  if (!loading) {
+    return null;
+  }
+  return (
+    <View style={styles.loading}>
+      <ActivityIndicator animating size="large" />
+    </View>
+  );
+}
+
 var index = 0;
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
 
   function searchBooks() {
-    dispatch(getBooks(value, index));
-    index++;
+    dispatch(getBooks(value));
+  }
+  function nextPage() {
+    if (books.length < totalItems) {
+      index++;
+      dispatch(getPage(value, index * 10));
+    }
   }
   let books = useSelector(state => state.books.books);
   let loading = useSelector(state => state.books.loading);
-  //let state = useSelector(st => st);
-
-  console.log(books);
+  let loadingPage = useSelector(state => state.books.loadingPage);
+  let totalItems = useSelector(state => state.books.totalItems);
 
   const [value, onChangeText] = React.useState('');
   return (
@@ -71,14 +111,15 @@ export default function HomeScreen() {
           <Text>Carregando...</Text>
         ) : (
           <FlatList
-            data={books.items}
-            renderItem={({item}) => <Item title={item.volumeInfo?.title} />}
-            keyExtractor={item => item.id}
-            onEndReached={() => searchBooks()}
-            onEndReachedThreshold={0.5}
-            initialNumToRender={10}
+            data={books}
+            renderItem={({item}) => <Item item={item?.volumeInfo} />}
+            keyExtractor={item => item.etag}
+            onEndReached={() => nextPage()}
             disableVirtualization={true}
             ListEmptyComponent={() => <EmptyContainer />}
+            ListFooterComponent={() => (
+              <FooterComponent loading={loadingPage} />
+            )}
           />
         )}
       </View>
@@ -102,17 +143,37 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingRight: 10,
     paddingBottom: 10,
-    paddingLeft: 0,
     backgroundColor: '#fff',
     color: '#424242',
   },
   item: {
+    flex: 1,
     backgroundColor: '#fff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    padding: 10,
+    marginVertical: 1,
+    marginHorizontal: 1,
+    flexDirection: 'row',
   },
   title: {
-    fontSize: 32,
+    fontSize: 16,
+    fontWeight: '500',
+    marginLeft: 10,
+  },
+  authors: {
+    fontSize: 14,
+    marginLeft: 10,
+    color: 'gray',
+    flexShrink: 2,
+  },
+  loading: {
+    flex: 1,
+    padding: 10,
+  },
+  thumbnail: {
+    width: 60,
+    height: 80,
+  },
+  favoriteIcon: {
+    padding: 10,
   },
 });
