@@ -1,4 +1,3 @@
-import {useSelector} from 'react-redux';
 // Action Types
 import {REACT_APP_GOOGLE_API_KEY} from 'react-native-dotenv';
 
@@ -9,6 +8,8 @@ export const Types = {
   GET_PAGE: 'page/LOAD',
   GET_PAGE_SUCCESS: 'page/LOAD_SUCCESS',
   GET_PAGE_FAIL: 'page/LOAD_FAIL',
+  ADD_FAVORITE: 'favorite/ADD',
+  REMOVE_FAVORITE: 'favorite/REMOVE',
 };
 
 // Reducer
@@ -19,6 +20,7 @@ const initialState = {
   books: [],
   error: undefined,
   totalItems: 0,
+  favorites: [],
 };
 
 export default function reducer(state = initialState, action) {
@@ -48,6 +50,11 @@ export default function reducer(state = initialState, action) {
       };
     case Types.GET_PAGE_FAIL:
       return {...state, loadingPage: false, error: action.error.message};
+    case Types.ADD_FAVORITE:
+      return {...state, favorites: [...state.favorites, action.payload.data]};
+    case Types.REMOVE_FAVORITE:
+      const fav = state.favorites.filter(data => data !== action.payload.data);
+      return {...state, favorites: fav};
     default:
       return state;
   }
@@ -74,6 +81,23 @@ export function getPage(value, index) {
       request: {
         url: `/volumes?q=${value}&startIndex=${index}&key=${REACT_APP_GOOGLE_API_KEY}`,
       },
+    },
+  };
+}
+
+export function addFavorite(item) {
+  return {
+    type: Types.ADD_FAVORITE,
+    payload: {
+      data: item,
+    },
+  };
+}
+export function removeFavorite(item) {
+  return {
+    type: Types.REMOVE_FAVORITE,
+    payload: {
+      data: item,
     },
   };
 }

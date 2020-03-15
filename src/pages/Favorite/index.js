@@ -1,18 +1,23 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {createStackNavigator} from '@react-navigation/stack';
+import DetailsScreen from '../Details/index';
+import FavoriteScreen from './favorite';
 
-export default function FavoriteScreen() {
+const Stack = createStackNavigator();
+
+export default function HomeIndex() {
   return (
-    <View style={styles.container}>
-      <Text>Favorite</Text>
-    </View>
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="FavoriteScreen"
+        component={FavoriteScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{title: 'Detalhes'}}
+      />
+    </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
