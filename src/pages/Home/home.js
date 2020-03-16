@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
-import {getBooks, getPage} from '~/store/ducks/books';
+import {getPage} from '~/store/ducks/books';
 import ItemList from '~/components/itemBooks';
 import Colors from '~/styles/colors';
 
@@ -40,7 +40,7 @@ export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
 
   function searchBooks() {
-    dispatch(getBooks(value));
+    dispatch(getPage(value));
   }
   function nextPage() {
     if (books.length < totalItems) {
@@ -50,7 +50,6 @@ export default function HomeScreen({navigation}) {
   }
   let books = useSelector(state => state.books.books);
   let loading = useSelector(state => state.books.loading);
-  let loadingPage = useSelector(state => state.books.loadingPage);
   let totalItems = useSelector(state => state.books.totalItems);
 
   const [value, onChangeText] = React.useState('');
@@ -85,23 +84,17 @@ export default function HomeScreen({navigation}) {
         />
       </View>
       <View style={styles.container}>
-        {loading ? (
-          <Text>Carregando...</Text>
-        ) : (
-          <FlatList
-            data={books}
-            renderItem={({item}) => (
-              <ItemList item={item?.volumeInfo} navigation={navigation} />
-            )}
-            keyExtractor={item => item.etag}
-            onEndReached={() => nextPage()}
-            disableVirtualization={true}
-            ListEmptyComponent={() => <EmptyContainer />}
-            ListFooterComponent={() => (
-              <FooterComponent loading={loadingPage} />
-            )}
-          />
-        )}
+        <FlatList
+          data={books}
+          renderItem={({item}) => (
+            <ItemList item={item?.volumeInfo} navigation={navigation} />
+          )}
+          keyExtractor={item => item.etag}
+          onEndReached={() => nextPage()}
+          disableVirtualization={true}
+          ListEmptyComponent={() => <EmptyContainer />}
+          ListFooterComponent={() => <FooterComponent loading={loading} />}
+        />
       </View>
     </View>
   );
