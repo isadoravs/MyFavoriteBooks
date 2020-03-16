@@ -4,8 +4,10 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addFavorite, removeFavorite} from '../../store/ducks/books';
 import {useSelector, useDispatch} from 'react-redux';
+import Colors from '~/styles/colors';
 
 const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get('window').height;
 
 export default function DetailsScreen({route}) {
   const dispatch = useDispatch();
@@ -21,35 +23,44 @@ export default function DetailsScreen({route}) {
     }
   }
   return (
-    <ScrollView style={{flex: 1}}>
-      <View style={styles.container}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Image
-            style={styles.thumbnail}
-            source={{uri: item.imageLinks?.thumbnail}}
-            resizeMethod={'scale'}
-          />
+    <ScrollView style={styles.container}>
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            padding: 15,
+            paddingBottom: 0,
+          }}>
           <Ionicons
             name={'ios-heart'}
-            color={isFavorite ? 'red' : 'gray'}
-            size={26}
+            color={isFavorite ? 'red' : Colors.inative}
+            size={30}
             onPress={() => favoriteShuffle()}
           />
         </View>
-        <Text style={styles.title}>{item.title}</Text>
-        <Text>{item.subtitle}</Text>
-        <Text style={styles.description}>{item.publisher}</Text>
-        <Text style={styles.description}>
-          {item.authors?.map((name, index) => {
-            if (index === item.authors.length - 1) {
-              return name;
-            }
-            return `${name}, `;
-          })}
-        </Text>
-        <Text>{item.publishedDate}</Text>
-        <Text>{item.description}</Text>
-        <Text>{item.title}</Text>
+
+        <Image
+          style={styles.thumbnail}
+          source={{uri: item.imageLinks?.thumbnail}}
+          resizeMethod={'scale'}
+        />
+        <View style={styles.description}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text>{item.subtitle}</Text>
+          <Text>{item.publisher}</Text>
+          <Text>
+            {item.authors?.map((name, index) => {
+              if (index === item.authors.length - 1) {
+                return name;
+              }
+              return `${name}, `;
+            })}
+          </Text>
+          <Text>{item.publishedDate}</Text>
+          <Text>{item.description}</Text>
+          <Text>{item.title}</Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -57,22 +68,26 @@ export default function DetailsScreen({route}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     flexDirection: 'column',
+    backgroundColor: `${Colors.gray}`,
   },
   thumbnail: {
     margin: 10,
     marginHorizontal: 40,
-    width: deviceWidth / 3,
-    height: deviceWidth / 2,
+    width: deviceWidth / 2.5,
+    height: deviceHeight / 3,
     alignSelf: 'center',
   },
   title: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '700',
+    paddingBottom: 10,
   },
   description: {
     fontSize: 14,
     color: 'gray',
+    padding: 10,
+    paddingTop: 15,
   },
 });

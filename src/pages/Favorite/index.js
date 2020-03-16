@@ -16,7 +16,7 @@ export default function HomeIndex() {
       <Stack.Screen
         name="Details"
         component={DetailsScreen}
-        options={{title: 'Detalhes'}}
+        options={{title: '', headerTransparent: 'true'}}
       />
     </Stack.Navigator>
   );

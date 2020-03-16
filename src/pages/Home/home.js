@@ -11,35 +11,9 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
-import {getBooks, getPage} from '../../store/ducks/books';
-
-function Item({item, navigation}) {
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('Details', {item: item})}>
-      <View style={styles.item}>
-        <Image
-          style={styles.thumbnail}
-          source={{uri: item.imageLinks?.smallThumbnail}}
-        />
-        <View flexDirection="column">
-          <Text numberOfLines={2} style={styles.title}>
-            {item.title}
-          </Text>
-          <Text style={styles.authors}>{item.publisher}</Text>
-          <Text style={styles.authors}>
-            {item.authors?.map((name, index) => {
-              if (index === item.authors.length - 1) {
-                return name;
-              }
-              return `${name}, `;
-            })}
-          </Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-}
+import {getBooks, getPage} from '~/store/ducks/books';
+import ItemList from '~/components/itemBooks';
+import Colors from '~/styles/colors';
 
 function EmptyContainer() {
   return (
@@ -117,7 +91,7 @@ export default function HomeScreen({navigation}) {
           <FlatList
             data={books}
             renderItem={({item}) => (
-              <Item item={item?.volumeInfo} navigation={navigation} />
+              <ItemList item={item?.volumeInfo} navigation={navigation} />
             )}
             keyExtractor={item => item.etag}
             onEndReached={() => nextPage()}
@@ -139,7 +113,7 @@ const styles = StyleSheet.create({
   },
   searchSection: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.darkgray,
   },
   searchIcon: {
     padding: 10,
@@ -149,35 +123,20 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingRight: 10,
     paddingBottom: 10,
-    backgroundColor: '#fff',
-    color: '#424242',
+    backgroundColor: Colors.darkgray,
+    color: Colors.black,
   },
   item: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.darkgray,
     padding: 10,
     marginVertical: 1,
     marginHorizontal: 1,
     flexDirection: 'row',
   },
-  title: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginLeft: 10,
-  },
-  authors: {
-    fontSize: 14,
-    marginLeft: 10,
-    color: 'gray',
-    flexShrink: 2,
-  },
   loading: {
     flex: 1,
     padding: 10,
-  },
-  thumbnail: {
-    width: 60,
-    height: 80,
   },
   favoriteIcon: {
     padding: 10,
