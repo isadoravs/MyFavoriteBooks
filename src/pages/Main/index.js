@@ -4,6 +4,7 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../Home/index.js';
 import FavoriteScreen from '../Favorite/index.js';
+import Colors from '~/styles/colors';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -11,14 +12,14 @@ function MyTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      activeColor="#ffffff"
-      inactiveColor="#BBBBBB"
+      activeColor={Colors.gray}
+      inactiveColor={Colors.inative}
       shifting={true}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarColor: '#8C46FF',
+          tabBarColor: Colors.purple,
           tabBarIcon: ({color}) => (
             <Ionicons name={'ios-home'} color={color} size={26} />
           ),
@@ -28,14 +29,10 @@ function MyTabs() {
         name="Favoritos"
         component={FavoriteScreen}
         options={{
-          tabBarColor: '#FF4692',
+          tabBarColor: Colors.pink,
           tabBarIcon: ({color}) => (
             <Ionicons name={'ios-heart'} color={color} size={26} />
           ),
-          activeColor: '#ffffff',
-          inactiveColor: '#92c5c2',
-          barStyle: {backgroundColor: '#2c6d6a'},
-          showIcon: true,
         }}
       />
     </Tab.Navigator>

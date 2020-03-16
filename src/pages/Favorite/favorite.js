@@ -1,15 +1,29 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {View, StyleSheet, FlatList, Text} from 'react-native';
+import ItemList from '~/components/itemBooks';
 
-export default function FavoriteScreen() {
+export default function FavoriteScreen({navigation}) {
   const favorites = useSelector(state => state.books.favorites);
-  console.log(favorites);
   return (
     <View style={styles.container}>
-      {favorites?.map((text, index) => {
-        return <Text key={index}>{text.title}</Text>;
-      })}
+      <FlatList
+        data={favorites}
+        renderItem={({item}) => (
+          <ItemList item={item} navigation={navigation} />
+        )}
+        keyExtractor={item => item.etag}
+        ListEmptyComponent={() => <EmptyContainer />}
+        disableVirtualization={true}
+      />
+    </View>
+  );
+}
+
+function EmptyContainer() {
+  return (
+    <View style={styles.container}>
+      <Text>Nenhum livro favorito</Text>
     </View>
   );
 }
@@ -17,7 +31,5 @@ export default function FavoriteScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
