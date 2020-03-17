@@ -47,7 +47,7 @@ export default function DetailsScreen({route}) {
             source={{uri: item.imageLinks?.thumbnail}}
             resizeMethod={'scale'}
           />
-          <View style={styles.description}>
+          <View style={styles.body}>
             <Text style={styles.title}>{item.title}</Text>
             <Text>{item.subtitle}</Text>
             <Text>{item.publisher}</Text>
@@ -60,8 +60,7 @@ export default function DetailsScreen({route}) {
               })}
             </Text>
             <Text>{item.publishedDate}</Text>
-            <Text>{item.description}</Text>
-            <Text>{item.title}</Text>
+            <Text style={styles.description}>{item.description}</Text>
           </View>
         </View>
       </ScrollView>
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     paddingBottom: 10,
   },
-  description: {
+  body: {
     fontSize: 14,
     color: 'gray',
     padding: 10,
@@ -98,5 +97,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     padding: 15,
     paddingBottom: 0,
+  },
+  description: {
+    paddingTop: 10,
   },
 });

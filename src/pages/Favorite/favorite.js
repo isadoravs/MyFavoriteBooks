@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {View, StyleSheet, FlatList, Text, SafeAreaView} from 'react-native';
 import ItemList from '~/components/itemBooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';

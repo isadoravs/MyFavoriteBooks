@@ -53,6 +53,9 @@ export default function reducer(state = initialState, action) {
       return {...state, loading: false, error: action.error.message};
     case Types.ADD_FAVORITE:
       return {...state, favorites: [...state.favorites, action.payload.data]};
+    case Types.REMOVE_FAVORITE:
+      const fav = state.favorites.filter(data => data !== action.payload.data);
+      return {...state, favorites: fav};
     default:
       return state;
   }

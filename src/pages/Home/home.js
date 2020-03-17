@@ -42,17 +42,14 @@ export default function HomeScreen({navigation}) {
   let books = useSelector(state => state.books.books);
   let loading = useSelector(state => state.books.loading);
   let totalItems = useSelector(state => state.books.totalItems);
-  let error = useSelector(
-    state => state.books.error,
-    () => {
-      if (error) {
-        Snackbar.show({
-          text: error,
-          duration: Snackbar.LENGTH_SHORT,
-        });
-      }
-    },
-  );
+  let error = useSelector(state => state.books.error);
+
+  if (error) {
+    Snackbar.show({
+      text: error,
+      duration: Snackbar.LENGTH_SHORT,
+    });
+  }
 
   function searchBooks() {
     dispatch(getBooks(value));
