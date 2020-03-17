@@ -2,11 +2,15 @@
 import {REACT_APP_GOOGLE_API_KEY} from 'react-native-dotenv';
 
 export const Types = {
+  GET_BOOKS: 'books/LOAD',
+  GET_BOOKS_SUCCESS: 'books/LOAD_SUCCESS',
+  GET_BOOKS_FAIL: 'books/LOAD_FAIL',
   GET_PAGE: 'page/LOAD',
   GET_PAGE_SUCCESS: 'page/LOAD_SUCCESS',
   GET_PAGE_FAIL: 'page/LOAD_FAIL',
   ADD_FAVORITE: 'favorite/ADD',
   REMOVE_FAVORITE: 'favorite/REMOVE',
+  RESTART_SEARCH: 'search/restart',
 };
 
 // Reducer
@@ -21,45 +25,57 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_PAGE:
+    case Types.GET_BOOKS:
       return {...state, loading: true};
-    case Types.GET_PAGE_SUCCESS:
-      console.log(action?.payload?.data);
-      let newState;
-      if (state.books) {
-        newState = action.payload.data.items
-          ? [...state.books, ...action.payload.data.items]
-          : [...state.books];
-      } else {
-        newState = action.payload.data.items;
-      }
+    case Types.GET_BOOKS_SUCCESS:
       return {
         ...state,
         loading: false,
-        books: newState,
+        books: action.payload.data.items,
         totalItems: action.payload.data.totalItems,
+        error: undefined,
+      };
+    case Types.GET_BOOKS_FAIL:
+      return {...state, loading: false, error: action.error.message};
+    case Types.GET_PAGE:
+      return {...state, loading: true};
+    case Types.GET_PAGE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        books: action.payload.data.items
+          ? [...state.books, ...action.payload.data.items]
+          : [...state.books],
+        totalItems: action.payload.data.totalItems,
+        error: undefined,
       };
     case Types.GET_PAGE_FAIL:
       return {...state, loading: false, error: action.error.message};
     case Types.ADD_FAVORITE:
       return {...state, favorites: [...state.favorites, action.payload.data]};
-    case Types.REMOVE_FAVORITE:
-      const fav = state.favorites.filter(data => data !== action.payload.data);
-      return {...state, favorites: fav};
     default:
       return state;
   }
 }
 
 // Action Creators
+export function getBooks(value) {
+  return {
+    type: Types.GET_BOOKS,
+    payload: {
+      request: {
+        url: `/volumes?q=${value}&startIndex=0&key=${REACT_APP_GOOGLE_API_KEY}`,
+      },
+    },
+  };
+}
 
 export function getPage(value, index) {
-  const ind = index ? index : 0;
   return {
     type: Types.GET_PAGE,
     payload: {
       request: {
-        url: `/volumes?q=${value}&startIndex=${ind}&key=${REACT_APP_GOOGLE_API_KEY}`,
+        url: `/volumes?q=${value}&startIndex=${index}&key=${REACT_APP_GOOGLE_API_KEY}`,
       },
     },
   };
@@ -79,5 +95,10 @@ export function removeFavorite(item) {
     payload: {
       data: item,
     },
+  };
+}
+export function restartSearch() {
+  return {
+    type: Types.RESTART_SEARCH,
   };
 }

@@ -6,12 +6,14 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
-import {getPage} from '~/store/ducks/books';
+import {getPage, getBooks} from '~/store/ducks/books';
 import ItemList from '~/components/itemBooks';
 import Colors from '~/styles/colors';
+import Snackbar from 'react-native-snackbar';
 
 function EmptyContainer({message}) {
   return (
@@ -37,9 +39,23 @@ var index = 0;
 
 export default function HomeScreen({navigation}) {
   const dispatch = useDispatch();
+  let books = useSelector(state => state.books.books);
+  let loading = useSelector(state => state.books.loading);
+  let totalItems = useSelector(state => state.books.totalItems);
+  let error = useSelector(
+    state => state.books.error,
+    () => {
+      if (error) {
+        Snackbar.show({
+          text: error,
+          duration: Snackbar.LENGTH_SHORT,
+        });
+      }
+    },
+  );
 
   function searchBooks() {
-    dispatch(getPage(value));
+    dispatch(getBooks(value));
   }
   function nextPage() {
     if (books.length < totalItems) {
@@ -47,62 +63,61 @@ export default function HomeScreen({navigation}) {
       dispatch(getPage(value, index * 10));
     }
   }
-  let books = useSelector(state => state.books.books);
-  let loading = useSelector(state => state.books.loading);
-  let totalItems = useSelector(state => state.books.totalItems);
 
   const [value, onChangeText] = React.useState('');
   return (
-    <View style={styles.container}>
-      <View style={styles.searchSection}>
-        <Ionicons
-          style={styles.searchIcon}
-          name="ios-search"
-          size={20}
-          color="#000"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Pesquisar"
-          onChangeText={text => {
-            onChangeText(text);
-            index = 0;
-          }}
-          onEndEditing={() => {
-            searchBooks();
-          }}
-          underlineColorAndroid="transparent"
-          value={value}
-        />
-        <Ionicons
-          style={styles.searchIcon}
-          name="ios-close"
-          size={26}
-          color="#000"
-          onPress={() => onChangeText('')}
-        />
-      </View>
+    <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        {totalItems ? (
-          <FlatList
-            data={books}
-            renderItem={({item}) => (
-              <ItemList item={item?.volumeInfo} navigation={navigation} />
-            )}
-            keyExtractor={item => item.etag}
-            onEndReached={() => nextPage()}
-            disableVirtualization={true}
-            contentContainerStyle={styles.containerStyle}
-            ListEmptyComponent={() => (
-              <EmptyContainer message={'Faça uma busca'} />
-            )}
-            ListFooterComponent={() => <FooterComponent loading={loading} />}
+        <View style={styles.searchSection}>
+          <Ionicons
+            style={styles.searchIcon}
+            name="ios-search"
+            size={20}
+            color="#000"
           />
-        ) : (
-          <EmptyContainer message={'A busca não retornou resultados'} />
-        )}
+          <TextInput
+            style={styles.input}
+            placeholder="Pesquisar"
+            onChangeText={text => {
+              onChangeText(text);
+              index = 0;
+            }}
+            onEndEditing={() => {
+              searchBooks();
+            }}
+            underlineColorAndroid="transparent"
+            value={value}
+          />
+          <Ionicons
+            style={styles.searchIcon}
+            name="ios-close"
+            size={26}
+            color="#000"
+            onPress={() => onChangeText('')}
+          />
+        </View>
+        <View style={styles.container}>
+          {totalItems ? (
+            <FlatList
+              data={books}
+              renderItem={({item}) => (
+                <ItemList item={item?.volumeInfo} navigation={navigation} />
+              )}
+              keyExtractor={item => item.id}
+              onEndReached={() => nextPage()}
+              disableVirtualization={true}
+              contentContainerStyle={styles.containerStyle}
+              ListEmptyComponent={() => (
+                <EmptyContainer message={'Faça uma busca'} />
+              )}
+              ListFooterComponent={() => <FooterComponent loading={loading} />}
+            />
+          ) : (
+            <EmptyContainer message={'A busca não retornou resultados'} />
+          )}
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

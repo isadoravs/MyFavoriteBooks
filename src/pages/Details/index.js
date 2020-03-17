@@ -1,5 +1,12 @@
 import * as React from 'react';
-import {View, StyleSheet, Text, Image, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Dimensions,
+  SafeAreaView,
+} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {addFavorite, removeFavorite} from '../../store/ducks/books';
@@ -23,40 +30,42 @@ export default function DetailsScreen({route}) {
     }
   }
   return (
-    <ScrollView style={styles.container}>
-      <View>
-        <View style={styles.header}>
-          <Ionicons
-            name={'ios-heart'}
-            color={isFavorite ? 'red' : Colors.inative}
-            size={30}
-            onPress={() => favoriteShuffle()}
-          />
-        </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View>
+          <View style={styles.header}>
+            <Ionicons
+              name={'ios-heart'}
+              color={isFavorite ? 'red' : Colors.inative}
+              size={30}
+              onPress={() => favoriteShuffle()}
+            />
+          </View>
 
-        <Image
-          style={styles.thumbnail}
-          source={{uri: item.imageLinks?.thumbnail}}
-          resizeMethod={'scale'}
-        />
-        <View style={styles.description}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text>{item.subtitle}</Text>
-          <Text>{item.publisher}</Text>
-          <Text>
-            {item.authors?.map((name, index) => {
-              if (index === item.authors.length - 1) {
-                return name;
-              }
-              return `${name}, `;
-            })}
-          </Text>
-          <Text>{item.publishedDate}</Text>
-          <Text>{item.description}</Text>
-          <Text>{item.title}</Text>
+          <Image
+            style={styles.thumbnail}
+            source={{uri: item.imageLinks?.thumbnail}}
+            resizeMethod={'scale'}
+          />
+          <View style={styles.description}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text>{item.subtitle}</Text>
+            <Text>{item.publisher}</Text>
+            <Text>
+              {item.authors?.map((name, index) => {
+                if (index === item.authors.length - 1) {
+                  return name;
+                }
+                return `${name}, `;
+              })}
+            </Text>
+            <Text>{item.publishedDate}</Text>
+            <Text>{item.description}</Text>
+            <Text>{item.title}</Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

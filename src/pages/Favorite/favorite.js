@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {View, StyleSheet, FlatList, Text} from 'react-native';
+import {View, StyleSheet, FlatList, Text, SafeAreaView} from 'react-native';
 import ItemList from '~/components/itemBooks';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '~/styles/colors';
@@ -8,18 +8,20 @@ import Colors from '~/styles/colors';
 export default function FavoriteScreen({navigation}) {
   const favorites = useSelector(state => state.books.favorites);
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={favorites}
-        renderItem={({item}) => (
-          <ItemList item={item} navigation={navigation} />
-        )}
-        keyExtractor={item => item.etag}
-        contentContainerStyle={styles.containerStyle}
-        ListEmptyComponent={() => <EmptyContainer />}
-        disableVirtualization={true}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <FlatList
+          data={favorites}
+          renderItem={({item}) => (
+            <ItemList item={item} navigation={navigation} />
+          )}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.containerStyle}
+          ListEmptyComponent={() => <EmptyContainer />}
+          disableVirtualization={true}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
