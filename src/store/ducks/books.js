@@ -10,7 +10,6 @@ export const Types = {
   GET_PAGE_FAIL: 'page/LOAD_FAIL',
   ADD_FAVORITE: 'favorite/ADD',
   REMOVE_FAVORITE: 'favorite/REMOVE',
-  RESTART_SEARCH: 'search/restart',
 };
 
 // Reducer
@@ -98,10 +97,5 @@ export function removeFavorite(item) {
     payload: {
       data: item,
     },
-  };
-}
-export function restartSearch() {
-  return {
-    type: Types.RESTART_SEARCH,
   };
 }
