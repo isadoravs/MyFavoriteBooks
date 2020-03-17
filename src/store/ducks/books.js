@@ -15,7 +15,7 @@ const initialState = {
   loading: false,
   books: [],
   error: undefined,
-  totalItems: 0,
+  totalItems: 1,
   favorites: [],
 };
 
@@ -24,6 +24,7 @@ export default function reducer(state = initialState, action) {
     case Types.GET_PAGE:
       return {...state, loading: true};
     case Types.GET_PAGE_SUCCESS:
+      console.log(action?.payload?.data);
       let newState;
       if (state.books) {
         newState = action.payload.data.items

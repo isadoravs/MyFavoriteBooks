@@ -6,8 +6,6 @@ import {
   Text,
   FlatList,
   ActivityIndicator,
-  Image,
-  TouchableOpacity,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSelector, useDispatch} from 'react-redux';
@@ -15,10 +13,11 @@ import {getPage} from '~/store/ducks/books';
 import ItemList from '~/components/itemBooks';
 import Colors from '~/styles/colors';
 
-function EmptyContainer() {
+function EmptyContainer({message}) {
   return (
-    <View>
-      <Text>Faça uma busca</Text>
+    <View style={styles.empty}>
+      <Ionicons name={'ios-search'} size={40} color={Colors.black} />
+      <Text style={styles.message}>{message}</Text>
     </View>
   );
 }
@@ -84,17 +83,24 @@ export default function HomeScreen({navigation}) {
         />
       </View>
       <View style={styles.container}>
-        <FlatList
-          data={books}
-          renderItem={({item}) => (
-            <ItemList item={item?.volumeInfo} navigation={navigation} />
-          )}
-          keyExtractor={item => item.etag}
-          onEndReached={() => nextPage()}
-          disableVirtualization={true}
-          ListEmptyComponent={() => <EmptyContainer />}
-          ListFooterComponent={() => <FooterComponent loading={loading} />}
-        />
+        {totalItems ? (
+          <FlatList
+            data={books}
+            renderItem={({item}) => (
+              <ItemList item={item?.volumeInfo} navigation={navigation} />
+            )}
+            keyExtractor={item => item.etag}
+            onEndReached={() => nextPage()}
+            disableVirtualization={true}
+            contentContainerStyle={styles.containerStyle}
+            ListEmptyComponent={() => (
+              <EmptyContainer message={'Faça uma busca'} />
+            )}
+            ListFooterComponent={() => <FooterComponent loading={loading} />}
+          />
+        ) : (
+          <EmptyContainer message={'A busca não retornou resultados'} />
+        )}
       </View>
     </View>
   );
@@ -102,7 +108,7 @@ export default function HomeScreen({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
+    flex: 1,
   },
   searchSection: {
     flexDirection: 'row',
@@ -133,5 +139,17 @@ const styles = StyleSheet.create({
   },
   favoriteIcon: {
     padding: 10,
+  },
+  empty: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  message: {
+    fontSize: 16,
+  },
+  containerStyle: {
+    flexGrow: 1,
   },
 });
