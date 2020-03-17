@@ -25,13 +25,7 @@ export default function DetailsScreen({route}) {
   return (
     <ScrollView style={styles.container}>
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            padding: 15,
-            paddingBottom: 0,
-          }}>
+        <View style={styles.header}>
           <Ionicons
             name={'ios-heart'}
             color={isFavorite ? 'red' : Colors.inative}
@@ -89,5 +83,11 @@ const styles = StyleSheet.create({
     color: 'gray',
     padding: 10,
     paddingTop: 15,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 15,
+    paddingBottom: 0,
   },
 });
