@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   TextInput,
   View,
@@ -35,9 +35,8 @@ function FooterComponent({loading}) {
   );
 }
 
-var index = 0;
-
 export default function HomeScreen({navigation}) {
+  const [index, setIndex] = useState(0);
   const dispatch = useDispatch();
   let books = useSelector(state => state.books.books);
   let loading = useSelector(state => state.books.loading);
@@ -56,7 +55,7 @@ export default function HomeScreen({navigation}) {
   }
   function nextPage() {
     if (books.length < totalItems) {
-      index++;
+      setIndex(index + 1);
       dispatch(getPage(value, index * 10));
     }
   }
@@ -77,7 +76,7 @@ export default function HomeScreen({navigation}) {
             placeholder="Pesquisar"
             onChangeText={text => {
               onChangeText(text);
-              index = 0;
+              setIndex(0);
             }}
             onEndEditing={() => {
               searchBooks();
