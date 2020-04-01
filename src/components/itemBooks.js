@@ -18,30 +18,29 @@ export default function ItemList({navigation, item}) {
     }
   }
   return (
-    <View style={styles.item}>
+    <View style={styles.container}>
       <TouchableOpacity
+        style={styles.item}
         onPress={() => navigation.navigate('Details', {item: item})}>
+        <Image
+          style={styles.thumbnail}
+          source={{uri: item.imageLinks?.smallThumbnail}}
+        />
         <View style={styles.info}>
-          <Image
-            style={styles.thumbnail}
-            source={{uri: item.imageLinks?.smallThumbnail}}
-          />
-          <View style={styles.description}>
-            <Text numberOfLines={2} style={styles.title}>
-              {item.title}
-            </Text>
-            <Text numberOfLines={1} style={styles.authors}>
-              {item.publisher}
-            </Text>
-            <Text numberOfLines={1} style={styles.authors}>
-              {item.authors?.map((name, index) => {
-                if (index === item.authors.length - 1) {
-                  return name;
-                }
-                return `${name}, `;
-              })}
-            </Text>
-          </View>
+          <Text numberOfLines={2} style={styles.title}>
+            {item.title}
+          </Text>
+          <Text numberOfLines={1} style={styles.authors}>
+            {item.publisher}
+          </Text>
+          <Text numberOfLines={1} style={styles.authors}>
+            {item.authors?.map((name, index) => {
+              if (index === item.authors.length - 1) {
+                return name;
+              }
+              return `${name}, `;
+            })}
+          </Text>
         </View>
       </TouchableOpacity>
       <Ionicons
@@ -57,17 +56,19 @@ export default function ItemList({navigation, item}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 2,
-  },
-  item: {
+    flexDirection: 'row',
     backgroundColor: '#FAFAFA',
     padding: 10,
     marginVertical: 1,
     marginHorizontal: 1,
   },
-  info: {
+  item: {
     flex: 1,
     flexDirection: 'row',
+  },
+  info: {
+    flex: 1,
+    flexDirection: 'column',
   },
   title: {
     fontSize: 16,
@@ -85,10 +86,7 @@ const styles = StyleSheet.create({
     height: 80,
   },
   favoriteIcon: {
-    alignSelf: 'flex-end',
-  },
-  description: {
-    flex: 1,
     flexDirection: 'column',
+    alignSelf: 'flex-start',
   },
 });
