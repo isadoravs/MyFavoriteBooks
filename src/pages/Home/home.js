@@ -36,7 +36,7 @@ function FooterComponent({loading}) {
 }
 
 export default function HomeScreen({navigation}) {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(1);
   const dispatch = useDispatch();
   let books = useSelector(state => state.books.books);
   let loading = useSelector(state => state.books.loading);
@@ -52,11 +52,12 @@ export default function HomeScreen({navigation}) {
 
   function searchBooks() {
     dispatch(getBooks(value));
+    setIndex(1);
   }
   function nextPage() {
     if (books.length < totalItems) {
-      setIndex(index + 1);
       dispatch(getPage(value, index * 10));
+      setIndex(index + 1);
     }
   }
 
@@ -76,7 +77,6 @@ export default function HomeScreen({navigation}) {
             placeholder="Pesquisar"
             onChangeText={text => {
               onChangeText(text);
-              setIndex(0);
             }}
             onEndEditing={() => {
               searchBooks();
@@ -101,6 +101,7 @@ export default function HomeScreen({navigation}) {
               )}
               keyExtractor={item => item.id}
               onEndReached={() => nextPage()}
+              onEndReachedThreshold={0.5}
               disableVirtualization={true}
               contentContainerStyle={styles.containerStyle}
               ListEmptyComponent={() => (
