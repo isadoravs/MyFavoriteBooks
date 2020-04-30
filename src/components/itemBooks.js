@@ -14,7 +14,7 @@ import Colors from '~/styles/colors';
 export default function ItemList({navigation, item}) {
   const dispatch = useDispatch();
   const favorites = useSelector(state => state.books.favorites);
-  const isFavorite = favorites.filter(fav => fav === item).length;
+  const isFavorite = favorites.find(fav => fav === item);
 
   //método que adiciona e retira um livro dos favoritos
   function favoriteShuffle() {
