@@ -1,3 +1,5 @@
+# MyFavoriteBooks
+
 Aplicativo React Native para busca na API Google Books.
 
 Criar arquivo .env com a chave da API na variável REACT_APP_GOOGLE_API_KEY.
