@@ -2,9 +2,9 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HomeScreen from '../Home/index.js';
-import FavoriteScreen from '../Favorite/index.js';
-import Colors from '~/styles/colors';
+import HomeScreen from './home.routes';
+import FavoriteScreen from './favorite.routes';
+import Colors from '../styles/colors';
 
 const Tab = createMaterialBottomTabNavigator();
 

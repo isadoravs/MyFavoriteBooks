@@ -1,3 +1,9 @@
+/*
+ * Componente de item para flatlist de livros
+ * Recebe um item(livro)
+ *
+ */
+
 import * as React from 'react';
 import {View, StyleSheet, Text, Image, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,13 +16,11 @@ export default function ItemList({navigation, item}) {
   const favorites = useSelector(state => state.books.favorites);
   const isFavorite = favorites.filter(fav => fav === item).length;
 
+  //método que adiciona e retira um livro dos favoritos
   function favoriteShuffle() {
-    if (isFavorite) {
-      dispatch(removeFavorite(item));
-    } else {
-      dispatch(addFavorite(item));
-    }
+    dispatch(isFavorite ? removeFavorite(item) : addFavorite(item));
   }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity

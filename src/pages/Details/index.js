@@ -1,3 +1,7 @@
+/*
+ * Tela que mostra detalhes de um livro
+ */
+
 import * as React from 'react';
 import {
   View,
@@ -22,13 +26,11 @@ export default function DetailsScreen({route}) {
   const favorites = useSelector(state => state.books.favorites);
   const isFavorite = favorites.filter(fav => fav === item).length;
 
+  //método que adiciona e retira um livro dos favoritos
   function favoriteShuffle() {
-    if (isFavorite) {
-      dispatch(removeFavorite(item));
-    } else {
-      dispatch(addFavorite(item));
-    }
+    dispatch(isFavorite ? removeFavorite(item) : addFavorite(item));
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
