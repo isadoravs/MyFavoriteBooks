@@ -1,6 +1,6 @@
 /*
- * Tela para pesquisa de livros, retorna o resultado da requisição da API Google Books
- * mostra os livros em forma de lista
+ * Tela para pesquisa de livros, mostra o resultado da requisição na API Google Books em forma de lista 
+ * onde os itens podem ser pressionados para navegar até a tela de detalhes
  */
 
 import React, {useState} from 'react';
@@ -20,6 +20,7 @@ import ItemList from '~/components/itemBooks';
 import Colors from '~/styles/colors';
 import Snackbar from 'react-native-snackbar';
 
+//método que renderiza quando a busca não retorna resultados ou quando a lista de livros está vazia
 function EmptyContainer({message}) {
   return (
     <View style={styles.empty}>
@@ -29,6 +30,7 @@ function EmptyContainer({message}) {
   );
 }
 
+//método para renderizar um loading enquanto a store está realizando uma requisição
 function FooterComponent({loading}) {
   if (!loading) {
     return null;
@@ -42,11 +44,17 @@ function FooterComponent({loading}) {
 
 export default function HomeScreen({navigation}) {
   const [index, setIndex] = useState(1);
+  
   const dispatch = useDispatch();
-  let books = useSelector(state => state.books.books);
-  let loading = useSelector(state => state.books.loading);
-  let totalItems = useSelector(state => state.books.totalItems);
-  let error = useSelector(state => state.books.error);
+  
+  //livros que vieram do resultado da requisicao na API
+  const books = useSelector(state => state.books.books);
+  //loading que indica quando a requisição termina
+  const loading = useSelector(state => state.books.loading);
+  //total de livros que correspondem à busca
+  const totalItems = useSelector(state => state.books.totalItems);
+  //erro na requisição
+  const error = useSelector(state => state.books.error);
 
   if (error) {
     Snackbar.show({
