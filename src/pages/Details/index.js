@@ -27,7 +27,7 @@ export default function DetailsScreen({route}) {
   const isFavorite = favorites.filter(fav => fav === item).length;
 
   //método que adiciona e retira um livro dos favoritos
-  function favoriteShuffle() {
+  function favoriteToggle() {
     dispatch(isFavorite ? removeFavorite(item) : addFavorite(item));
   }
 
@@ -40,7 +40,7 @@ export default function DetailsScreen({route}) {
               name={'ios-heart'}
               color={isFavorite ? 'red' : Colors.inative}
               size={30}
-              onPress={() => favoriteShuffle()}
+              onPress={() => favoriteToggle()}
             />
           </View>
 
