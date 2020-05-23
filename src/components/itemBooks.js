@@ -17,7 +17,7 @@ export default function ItemList({navigation, item}) {
   const isFavorite = favorites.find(fav => fav === item);
 
   //método que adiciona e retira um livro dos favoritos
-  function favoriteShuffle() {
+  function favoriteToggle() {
     dispatch(isFavorite ? removeFavorite(item) : addFavorite(item));
   }
 
@@ -52,7 +52,7 @@ export default function ItemList({navigation, item}) {
         style={styles.favoriteIcon}
         size={26}
         color={isFavorite ? 'red' : Colors.inative}
-        onPress={() => favoriteShuffle()}
+        onPress={() => favoriteToggle()}
       />
     </View>
   );
